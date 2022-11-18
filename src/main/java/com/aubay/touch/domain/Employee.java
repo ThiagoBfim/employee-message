@@ -32,10 +32,10 @@ public class Employee {
         joinColumns = {@JoinColumn(name = "EMPLOYEE_ID")},
         inverseJoinColumns = {@JoinColumn(name = "GROUP_ID")}
     )
-    private Set<EmployeeGroup> groups = new HashSet<>();
+    private Set<Group> groups = new HashSet<>();
 
     @OneToMany(mappedBy = "employee")
-    private Set<MessageDelivery> messagesDelivered = new HashSet<>();
+    private Set<DeliveryMessage> messagesDelivered = new HashSet<>();
 
     @OneToMany(mappedBy = "employee")
     private Set<EmployeeChannel> employeeChannels = new HashSet<>();
@@ -56,19 +56,19 @@ public class Employee {
         this.name = name;
     }
 
-    public Set<EmployeeGroup> getGroups() {
+    public Set<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(Set<EmployeeGroup> groups) {
+    public void setGroups(Set<Group> groups) {
         this.groups = groups;
     }
 
-    public Set<MessageDelivery> getMessagesDelivered() {
+    public Set<DeliveryMessage> getMessagesDelivered() {
         return messagesDelivered;
     }
 
-    public void setMessagesDelivered(Set<MessageDelivery> messages) {
+    public void setMessagesDelivered(Set<DeliveryMessage> messages) {
         this.messagesDelivered = messages;
     }
 
@@ -97,7 +97,7 @@ public class Employee {
         return Objects.hash(id);
     }
 
-    public void addMessage(MessageDelivery message) {
+    public void addMessage(DeliveryMessage message) {
         messagesDelivered.add(message);
     }
 }

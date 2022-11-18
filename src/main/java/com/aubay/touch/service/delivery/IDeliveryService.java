@@ -4,5 +4,5 @@ public interface IDeliveryService {
 
     String getChannel();
 
-    DeliveryMessage sendMessage(String username, String identifier);
+    DeliveredMessage sendMessage(DeliveryMessage deliveryMessage);
 }

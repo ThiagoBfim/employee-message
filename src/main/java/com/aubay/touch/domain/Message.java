@@ -17,15 +17,18 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "TB_EMPLOYEE_GROUP")
+@Table(name = "TB_MESSAGE")
 public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TX_NAME", nullable = false)
-    private String name;
+    @Column(name = "TX_TITLE", nullable = false)
+    private String title;
+
+    @Column(name = "TX_MESSAGE", nullable = false)
+    private String message;
 
     @Column(name = "DT_DELIVERY", nullable = false)
     private LocalDateTime deliveryTime;
@@ -36,7 +39,7 @@ public class Message {
         joinColumns = {@JoinColumn(name = "MESSAGE_ID")},
         inverseJoinColumns = {@JoinColumn(name = "GROUP_ID")}
     )
-    private Set<EmployeeGroup> groups = new HashSet<>();
+    private Set<Group> groups = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -61,12 +64,12 @@ public class Message {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public LocalDateTime getDeliveryTime() {
@@ -77,16 +80,28 @@ public class Message {
         this.deliveryTime = deliveryTime;
     }
 
-    public Set<EmployeeGroup> getGroups() {
+    public Set<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(Set<EmployeeGroup> groups) {
+    public void setGroups(Set<Group> groups) {
         this.groups = groups;
     }
 
     public Set<Channel> getDeliveryChannel() {
         return deliveryChannel;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setDeliveryChannel(Set<Channel> deliveryChannel) {
+        this.deliveryChannel = deliveryChannel;
     }
 
     @Override

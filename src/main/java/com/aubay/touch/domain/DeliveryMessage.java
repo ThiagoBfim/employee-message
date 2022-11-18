@@ -13,8 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "TB_EMPLOYEE_CHANNEL")
-public class MessageDelivery {
+@Table(name = "TB_DELIVERY_MESSAGE")
+public class DeliveryMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,11 +37,11 @@ public class MessageDelivery {
     @JoinColumn(name = "RL_MESSAGE")
     private Message message;
 
-    public MessageDelivery() {
+    public DeliveryMessage() {
         /*Default*/
     }
 
-    public MessageDelivery(Message message) {
+    public DeliveryMessage(Message message) {
         this.message = message;
         setDeliveryTime(LocalDateTime.now());
         setSuccess(Boolean.TRUE);
@@ -104,7 +104,7 @@ public class MessageDelivery {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        MessageDelivery that = (MessageDelivery) o;
+        DeliveryMessage that = (DeliveryMessage) o;
         return Objects.equals(id, that.id);
     }
 
