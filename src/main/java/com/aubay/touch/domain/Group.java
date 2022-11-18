@@ -22,10 +22,13 @@ public class Group {
     @Column(name = "TX_NAME", unique = true, nullable = false)
     private String name;
 
+    public Group() {
+        /*Default*/
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "_EMPLOYEE_ID")
-    private Employee employee;
+    public Group(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
@@ -58,5 +61,12 @@ public class Group {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

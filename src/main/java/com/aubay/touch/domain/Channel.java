@@ -19,6 +19,14 @@ public class Channel {
     @Column(name = "TX_NAME", unique = true, nullable = false)
     private String name;
 
+    public Channel(String name) {
+        this.name = name;
+    }
+
+    public Channel() {
+        /*default*/
+    }
+
     public Long getId() {
         return id;
     }
@@ -50,5 +58,12 @@ public class Channel {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Channel{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }
