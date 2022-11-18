@@ -19,12 +19,12 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TX_NAME", nullable = false)
+    @Column(name = "TX_NAME", unique = true, nullable = false)
     private String name;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RL_EMPLOYEE")
+    @JoinColumn(name = "_EMPLOYEE_ID")
     private Employee employee;
 
     public Long getId() {

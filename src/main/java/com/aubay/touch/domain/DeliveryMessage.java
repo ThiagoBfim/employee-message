@@ -30,11 +30,11 @@ public class DeliveryMessage {
     private String error;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RL_EMPLOYEE")
+    @JoinColumn(name = "EMPLOYEE_ID")
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RL_MESSAGE")
+    @JoinColumn(name = "MESSAGE_ID")
     private Message message;
 
     public DeliveryMessage() {

@@ -16,7 +16,7 @@ public class Channel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TX_NAME", nullable = false)
+    @Column(name = "TX_NAME", unique = true, nullable = false)
     private String name;
 
     public Long getId() {

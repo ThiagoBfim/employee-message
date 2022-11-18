@@ -35,7 +35,7 @@ public class Message {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "TB_MESSAGE_GROUP",
+        name = "RL_MESSAGE_GROUP",
         joinColumns = {@JoinColumn(name = "MESSAGE_ID")},
         inverseJoinColumns = {@JoinColumn(name = "GROUP_ID")}
     )
@@ -43,7 +43,7 @@ public class Message {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "TB_DELIVERY_CHANNEL",
+        name = "RL_DELIVERY_CHANNEL",
         joinColumns = {@JoinColumn(name = "MESSAGE_ID")},
         inverseJoinColumns = {@JoinColumn(name = "CHANNEL_ID")}
     )

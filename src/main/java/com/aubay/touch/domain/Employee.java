@@ -3,6 +3,7 @@ package com.aubay.touch.domain;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,9 +29,9 @@ public class Employee {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "TB_EMPLOYEE_GROUP",
-        joinColumns = {@JoinColumn(name = "EMPLOYEE_ID")},
-        inverseJoinColumns = {@JoinColumn(name = "GROUP_ID")}
+            name = "RL_EMPLOYEE_GROUP",
+            joinColumns = {@JoinColumn(name = "EMPLOYEE_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "GROUP_ID")}
     )
     private Set<Group> groups = new HashSet<>();
 
@@ -78,6 +79,14 @@ public class Employee {
 
     public void setEmployeeChannels(Set<EmployeeChannel> channels) {
         this.employeeChannels = channels;
+    }
+
+    public String getEmployeeChannelsSeparatedByComma() {
+        return getEmployeeChannels().stream().map(e -> e.getChannel().getName()).collect(Collectors.joining(","));
+    }
+
+    public String getEmployeeGroupsSeparatedByComma() {
+        return getGroups().stream().map(Group::getName).collect(Collectors.joining(","));
     }
 
     @Override

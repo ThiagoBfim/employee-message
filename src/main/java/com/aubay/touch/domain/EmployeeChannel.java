@@ -23,11 +23,11 @@ public class EmployeeChannel {
     private String identifier;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RL_CHANNEL")
+    @JoinColumn(name = "CHANNEL_ID")
     private Channel channel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RL_EMPLOYEE")
+    @JoinColumn(name = "EMPLOYEE_ID")
     private Employee employee;
 
     public Long getId() {
