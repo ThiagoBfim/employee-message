@@ -30,6 +30,15 @@ public class EmployeeChannel {
     @JoinColumn(name = "EMPLOYEE_ID")
     private Employee employee;
 
+    public EmployeeChannel(Channel channel, String identifier) {
+        this.channel = channel;
+        this.identifier = identifier;
+    }
+
+    public EmployeeChannel() {
+        /*Default*/
+    }
+
     public Long getId() {
         return id;
     }
@@ -64,22 +73,29 @@ public class EmployeeChannel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         EmployeeChannel that = (EmployeeChannel) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && Objects.equals(identifier, that.identifier) && Objects.equals(channel, that.channel);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, identifier, channel);
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeChannel{" +
+                "id=" + id +
+                ", identifier='" + identifier + '\'' +
+                ", channel=" + channel +
+                '}';
     }
 
     public String getChannelName() {
         return channel.getName();
     }
+
+
 }

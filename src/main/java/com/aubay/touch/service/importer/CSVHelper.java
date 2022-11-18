@@ -1,8 +1,12 @@
 package com.aubay.touch.service.importer;
 
+import com.aubay.touch.domain.Channel;
+import com.aubay.touch.domain.Employee;
+import com.aubay.touch.domain.EmployeeChannel;
 import com.aubay.touch.domain.Message;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,9 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class CSVHelper {
 
@@ -36,7 +38,7 @@ public class CSVHelper {
                     validateColumns(columns);
                 } else {
                     String title = csvRecord.get(0);
-                    if (title != null && !title.isBlank()) {
+                    if (StringUtils.isNotBlank(title)) {
                         var message = new Message(
                                 title,
                                 csvRecord.get(1),
@@ -74,4 +76,38 @@ public class CSVHelper {
         }
     }
 
+    public static List<Employee> csvToEmployees(InputStream is) {
+        try (var fileReader = new BufferedReader(new InputStreamReader(is));
+             var csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT)) {
+
+            List<Employee> employees = new ArrayList<>();
+            var csvRecords = csvParser.getRecords();
+            List<Channel> channels = new ArrayList<>();
+            for (var csvRecord : csvRecords) {
+                if (channels.isEmpty()) {
+                    csvRecord.stream().skip(2).forEach(c -> {
+                        channels.add(new Channel(c.strip()));
+                    });
+                } else {
+                    String name = csvRecord.get(0);
+                    if (StringUtils.isNotBlank(name)) {
+                        Set<EmployeeChannel> employeeChannels = new HashSet<>();
+                        for (int i = 1; i <= channels.size(); i++) {
+                            String identifier = csvRecord.get(i + 1);
+                            if (StringUtils.isNotBlank(identifier)) {
+                                employeeChannels.add(new EmployeeChannel(channels.get(i - 1), identifier));
+                            }
+                        }
+                        var employee = new Employee(name, csvRecord.get(1), employeeChannels);
+                        employees.add(employee);
+                    }
+                }
+            }
+
+            return employees;
+        } catch (Exception e) {
+            LOGGER.error("Error parsing CSV to messages", e);
+            throw new RuntimeException("fail to parse CSV file: " + e.getMessage(), e);
+        }
+    }
 }

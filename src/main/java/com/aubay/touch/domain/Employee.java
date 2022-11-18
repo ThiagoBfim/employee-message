@@ -1,8 +1,6 @@
 package com.aubay.touch.domain;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,6 +38,13 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     private Set<EmployeeChannel> employeeChannels = new HashSet<>();
+
+    public Employee(String name, String groups, Set<EmployeeChannel> employeeChannels) {
+        this.name = name;
+        Arrays.stream(groups.split("/")).forEach(groupName -> this.groups.add(new Group(groupName)));
+        this.employeeChannels = employeeChannels;
+
+    }
 
     public Long getId() {
         return id;
@@ -104,6 +109,17 @@ public class Employee {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", groups=" + groups +
+                ", messagesDelivered=" + messagesDelivered +
+                ", employeeChannels=" + employeeChannels +
+                '}';
     }
 
     public void addMessage(DeliveryMessage message) {

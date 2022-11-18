@@ -76,8 +76,8 @@ public class Message {
     public Message(String title, String message, String groups, String channels) {
         this.title = title;
         this.message = message;
-        Arrays.stream(groups.split("/")).forEach(name -> this.groups.add(new Group(name)));
-        Arrays.stream(channels.split("/")).forEach(name -> this.deliveryChannel.add(new Channel(name)));
+        Arrays.stream(groups.split(" ")).forEach(name -> this.groups.add(new Group(name)));
+        Arrays.stream(channels.split(" ")).forEach(name -> this.deliveryChannel.add(new Channel(name)));
     }
 
     @PrePersist
