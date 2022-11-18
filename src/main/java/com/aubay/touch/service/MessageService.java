@@ -3,6 +3,7 @@ package com.aubay.touch.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.aubay.touch.controller.response.MessageResponse;
 import org.springframework.stereotype.Service;
 
 import com.aubay.touch.domain.DeliveryMessage;
@@ -49,4 +50,7 @@ public class MessageService {
         return messagesToBeDelivered.size();
     }
 
+    public List<MessageResponse> findAll() {
+        return messageRepository.findAllMessages();
+    }
 }

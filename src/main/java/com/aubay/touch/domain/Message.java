@@ -1,21 +1,40 @@
 package com.aubay.touch.domain;
 
+import com.aubay.touch.controller.response.MessageResponse;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+@NamedNativeQuery(
+        name = "MessageResponse",
+        query = """
+            select M.ID as id, 
+            M.TX_TITLE as title,
+            M.TX_MESSAGE as message,
+            M.DT_DELIVERY as deliveryDate,
+            (SELECT COUNT(TDM.ID) FROM TB_DELIVERY_MESSAGE TDM WHERE TDM.ID = M.ID AND TDM.ST_SUCCESS = false) as deliverySuccess,
+            (SELECT COUNT(TDM.ID) FROM TB_DELIVERY_MESSAGE TDM WHERE TDM.ID = M.ID) as deliveryFailed
+            from TB_MESSAGE M
+        """,
+        resultSetMapping = "MessageResponse"
+)
+@SqlResultSetMapping(
+        name = "MessageResponse",
+        classes = @ConstructorResult(
+                targetClass = MessageResponse.class,
+                columns = {
+                        @ColumnResult(name = "id"),
+                        @ColumnResult(name = "title"),
+                        @ColumnResult(name = "message"),
+                        @ColumnResult(name = "deliveryDate"),
+                        @ColumnResult(name = "deliverySuccess"),
+                        @ColumnResult(name = "deliveryFailed")
+                }
+        )
+)
 @Entity
 @Table(name = "TB_MESSAGE")
 public class Message {
