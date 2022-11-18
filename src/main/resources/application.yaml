@@ -6,6 +6,8 @@ spring:
     password: "password"
   jpa:
     database-platform: "org.hibernate.dialect.H2Dialect"
+    hibernate:
+      ddl-auto: create
 
 springdoc:
   api-docs:
