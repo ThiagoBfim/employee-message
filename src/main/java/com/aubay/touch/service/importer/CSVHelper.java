@@ -1,8 +1,9 @@
 package com.aubay.touch.service.importer;
 
-import com.aubay.touch.domain.*;
-import com.aubay.touch.repository.ChannelRepository;
-import com.aubay.touch.repository.GroupRepository;
+import com.aubay.touch.domain.Channel;
+import com.aubay.touch.domain.Employee;
+import com.aubay.touch.domain.EmployeeChannel;
+import com.aubay.touch.domain.Message;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.lang3.StringUtils;
@@ -38,11 +39,11 @@ public class CSVHelper {
                     columns = new String[]{csvRecord.get(0).strip(), csvRecord.get(1).strip(), csvRecord.get(2).strip(), csvRecord.get(3).strip()};
                     validateColumns(columns);
                 } else {
-                    String title = csvRecord.get(0);
-                    if (StringUtils.isNotBlank(title)) {
+                    String messageText = csvRecord.get(1);
+                    if (StringUtils.isNotBlank(messageText)) {
                         var message = new Message(
-                                title,
-                                csvRecord.get(1),
+                                csvRecord.get(0),
+                                messageText,
                                 csvRecord.get(2),
                                 csvRecord.get(3));
 

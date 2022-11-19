@@ -14,6 +14,7 @@ import javax.persistence.*;
         query = """
                 select M.ID as id,
                        M.TX_TITLE as title,
+                       CAST(M.ST_STATUS AS VARCHAR) as status,
                        M.TX_MESSAGE as message,
                        M.DT_DELIVERY as deliveryDate,
                        (SELECT COUNT(TDM.ID) FROM TB_DELIVERY_MESSAGE TDM WHERE TDM.MESSAGE_ID = M.ID AND TDM.ST_SUCCESS = true) as deliverySuccess,
@@ -29,6 +30,7 @@ import javax.persistence.*;
                 columns = {
                         @ColumnResult(name = "id"),
                         @ColumnResult(name = "title"),
+                        @ColumnResult(name = "status"),
                         @ColumnResult(name = "message"),
                         @ColumnResult(name = "deliveryDate"),
                         @ColumnResult(name = "deliverySuccess"),
@@ -44,7 +46,7 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TX_TITLE", nullable = false)
+    @Column(name = "TX_TITLE")
     private String title;
 
     @Column(name = "TX_MESSAGE", nullable = false)
@@ -82,8 +84,8 @@ public class Message {
     public Message(String title, String message, String groups, String channels) {
         this.title = title;
         this.message = message;
-        Arrays.stream(groups.split(" ")).forEach(name -> this.groups.add(new Group(name)));
-        Arrays.stream(channels.split(" ")).forEach(name -> this.deliveryChannel.add(new Channel(name)));
+        Arrays.stream(groups.split(",")).forEach(name -> this.groups.add(new Group(name)));
+        Arrays.stream(channels.split(",")).forEach(name -> this.deliveryChannel.add(new Channel(name)));
     }
 
     @PrePersist

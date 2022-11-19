@@ -35,7 +35,7 @@ public class Employee {
 
     public Employee(String name, String groups, Set<EmployeeChannel> employeeChannels) {
         this.name = name;
-        Arrays.stream(groups.split("/")).forEach(groupName -> this.groups.add(new Group(groupName)));
+        Arrays.stream(groups.split(",")).forEach(groupName -> this.groups.add(new Group(groupName)));
         this.employeeChannels = employeeChannels;
         this.employeeChannels.forEach(e -> e.setEmployee(this));
 

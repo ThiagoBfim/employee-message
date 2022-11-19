@@ -51,7 +51,7 @@ create table TB_MESSAGE
         primary key,
     DT_DELIVERY TIMESTAMP              not null,
     TX_MESSAGE  CHARACTER VARYING(255) not null,
-    TX_TITLE    CHARACTER VARYING(255) not null,
+    TX_TITLE    CHARACTER VARYING(255),
     ST_STATUS   CHARACTER VARYING(255) not null,
     DT_CREATE   timestamp              NOT NULL
 );
