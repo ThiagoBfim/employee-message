@@ -29,6 +29,12 @@ public class MessageController {
         return ResponseEntity.ok(messageService.findAll());
     }
 
+    @PostMapping
+    public ResponseEntity<Void> forceSendMessage() {
+        messageService.sendMessage();
+        return ResponseEntity.accepted().build();
+    }
+
     @RequestMapping(
             path = "/upload",
             method = RequestMethod.POST,

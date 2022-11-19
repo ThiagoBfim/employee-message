@@ -2,20 +2,12 @@ package com.aubay.touch.domain;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "TB_EMPLOYEE")
+@NamedEntityGraph(name = "Employee.detail",
+        attributeNodes = {@NamedAttributeNode("groups"), @NamedAttributeNode("messagesDelivered")})
 public class Employee {
 
     @Id
@@ -36,7 +28,7 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private Set<DeliveryMessage> messagesDelivered = new HashSet<>();
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private Set<EmployeeChannel> employeeChannels = new HashSet<>();
 
     public Employee(String name, String groups, Set<EmployeeChannel> employeeChannels) {
@@ -44,6 +36,10 @@ public class Employee {
         Arrays.stream(groups.split("/")).forEach(groupName -> this.groups.add(new Group(groupName)));
         this.employeeChannels = employeeChannels;
 
+    }
+
+    public Employee() {
+        /*Default*/
     }
 
     public Long getId() {

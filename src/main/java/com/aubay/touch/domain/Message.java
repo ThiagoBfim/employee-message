@@ -53,7 +53,7 @@ public class Message {
     @Column(name = "DT_DELIVERY", nullable = false)
     private LocalDateTime deliveryTime;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "RL_MESSAGE_GROUP",
             joinColumns = {@JoinColumn(name = "MESSAGE_ID")},
@@ -61,7 +61,7 @@ public class Message {
     )
     private Set<Group> groups = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "RL_DELIVERY_CHANNEL",
             joinColumns = {@JoinColumn(name = "MESSAGE_ID")},
