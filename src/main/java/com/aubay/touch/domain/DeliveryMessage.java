@@ -2,15 +2,7 @@ package com.aubay.touch.domain;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "TB_DELIVERY_MESSAGE")
@@ -26,8 +18,11 @@ public class DeliveryMessage {
     @Column(name = "ST_SUCCESS", nullable = false)
     private Boolean success;
 
-    @Column(name = "TX_ERROR", nullable = false, length = 5000)
+    @Column(name = "TX_ERROR", nullable = true, length = 5000)
     private String error;
+
+    @Column(name = "DT_CREATE", nullable = false)
+    private LocalDateTime dtCreate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMPLOYEE_ID")
@@ -43,8 +38,11 @@ public class DeliveryMessage {
 
     public DeliveryMessage(Message message) {
         this.message = message;
-        setDeliveryTime(LocalDateTime.now());
-        setSuccess(Boolean.TRUE);
+    }
+
+    @PrePersist
+    public void insertDate() {
+        this.dtCreate = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -98,18 +96,14 @@ public class DeliveryMessage {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         DeliveryMessage that = (DeliveryMessage) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && Objects.equals(deliveryTime, that.deliveryTime) && Objects.equals(message, that.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, deliveryTime, message);
     }
 }

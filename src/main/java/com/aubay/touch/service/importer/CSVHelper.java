@@ -1,14 +1,14 @@
 package com.aubay.touch.service.importer;
 
-import com.aubay.touch.domain.Channel;
-import com.aubay.touch.domain.Employee;
-import com.aubay.touch.domain.EmployeeChannel;
-import com.aubay.touch.domain.Message;
+import com.aubay.touch.domain.*;
+import com.aubay.touch.repository.ChannelRepository;
+import com.aubay.touch.repository.GroupRepository;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
+@Component
 public class CSVHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVHelper.class.getName());

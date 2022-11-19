@@ -12,14 +12,14 @@ import javax.persistence.*;
 @NamedNativeQuery(
         name = "MessageResponse",
         query = """
-                    select M.ID as id, 
-                    M.TX_TITLE as title,
-                    M.TX_MESSAGE as message,
-                    M.DT_DELIVERY as deliveryDate,
-                    (SELECT COUNT(TDM.ID) FROM TB_DELIVERY_MESSAGE TDM WHERE TDM.ID = M.ID AND TDM.ST_SUCCESS = false) as deliverySuccess,
-                    (SELECT COUNT(TDM.ID) FROM TB_DELIVERY_MESSAGE TDM WHERE TDM.ID = M.ID) as deliveryFailed
-                    from TB_MESSAGE M
-                """,
+                select M.ID as id,
+                       M.TX_TITLE as title,
+                       M.TX_MESSAGE as message,
+                       M.DT_DELIVERY as deliveryDate,
+                       (SELECT COUNT(TDM.ID) FROM TB_DELIVERY_MESSAGE TDM WHERE TDM.MESSAGE_ID = M.ID AND TDM.ST_SUCCESS = true) as deliverySuccess,
+                       (SELECT COUNT(TDM.ID) FROM TB_DELIVERY_MESSAGE TDM WHERE TDM.MESSAGE_ID = M.ID AND TDM.ST_SUCCESS = false) as deliveryFailed
+                from TB_MESSAGE M
+                                """,
         resultSetMapping = "MessageResponse"
 )
 @SqlResultSetMapping(
@@ -53,6 +53,12 @@ public class Message {
     @Column(name = "DT_DELIVERY", nullable = false)
     private LocalDateTime deliveryTime;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "ST_STATUS", nullable = false)
+    private MessageStatus status;
+
+    @Column(name = "DT_CREATE", nullable = false)
+    private LocalDateTime dtCreate;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "RL_MESSAGE_GROUP",
@@ -82,9 +88,12 @@ public class Message {
 
     @PrePersist
     public void insertDate() {
+        LocalDateTime now = LocalDateTime.now();
         if (deliveryTime == null) {
-            deliveryTime = LocalDateTime.now();
+            deliveryTime = now;
         }
+        this.dtCreate = now;
+        this.status = MessageStatus.PENDING;
     }
 
     public Long getId() {
@@ -133,6 +142,22 @@ public class Message {
 
     public void setDeliveryChannel(Set<Channel> deliveryChannel) {
         this.deliveryChannel = deliveryChannel;
+    }
+
+    public LocalDateTime getDtCreate() {
+        return dtCreate;
+    }
+
+    public void setDtCreate(LocalDateTime dtCreate) {
+        this.dtCreate = dtCreate;
+    }
+
+    public MessageStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(MessageStatus status) {
+        this.status = status;
     }
 
     @Override

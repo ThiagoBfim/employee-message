@@ -1,17 +1,17 @@
 create table TB_CHANNEL
 (
-    ID      BIGINT auto_increment
-        primary key,
-    TX_NAME CHARACTER VARYING(255) not null
+    TX_NAME CHARACTER VARYING(255) not null primary key
         constraint UK_52H4YYGTWM3CA3LRJIEMSWHLD
             unique
 );
 
 create table TB_EMPLOYEE
 (
-    ID      BIGINT auto_increment
+    ID        BIGINT auto_increment
         primary key,
-    TX_NAME CHARACTER VARYING(255) not null
+    DT_CREATE timestamp              NOT NULL,
+
+    TX_NAME   CHARACTER VARYING(255) not null
 );
 
 create table TB_EMPLOYEE_CHANNEL
@@ -19,7 +19,7 @@ create table TB_EMPLOYEE_CHANNEL
     ID            BIGINT auto_increment
         primary key,
     TX_IDENTIFIER CHARACTER VARYING(255) not null,
-    CHANNEL_ID    BIGINT,
+    CHANNEL_ID    CHARACTER VARYING(255),
     EMPLOYEE_ID   BIGINT,
     constraint FK1F9PH7GTIB83YWBAD7KOER2H9
         foreign key (EMPLOYEE_ID) references TB_EMPLOYEE,
@@ -29,17 +29,15 @@ create table TB_EMPLOYEE_CHANNEL
 
 create table TB_GROUP
 (
-    ID      BIGINT auto_increment
-        primary key,
-    TX_NAME CHARACTER VARYING(255) not null
+    TX_NAME CHARACTER VARYING(255) not null primary key
         constraint UK_CNQ204PVGVXJ4LRT0M0X43UIT
             unique
 );
 
 create table RL_EMPLOYEE_GROUP
 (
-    EMPLOYEE_ID BIGINT not null,
-    GROUP_ID    BIGINT not null,
+    EMPLOYEE_ID BIGINT                 not null,
+    GROUP_ID    CHARACTER VARYING(255) not null,
     primary key (EMPLOYEE_ID, GROUP_ID),
     constraint FKCCMNAM10V34SI0P4DMWPSF15H
         foreign key (GROUP_ID) references TB_GROUP,
@@ -53,13 +51,15 @@ create table TB_MESSAGE
         primary key,
     DT_DELIVERY TIMESTAMP              not null,
     TX_MESSAGE  CHARACTER VARYING(255) not null,
-    TX_TITLE    CHARACTER VARYING(255) not null
+    TX_TITLE    CHARACTER VARYING(255) not null,
+    ST_STATUS   CHARACTER VARYING(255) not null,
+    DT_CREATE   timestamp              NOT NULL
 );
 
 create table RL_DELIVERY_CHANNEL
 (
-    MESSAGE_ID BIGINT not null,
-    CHANNEL_ID BIGINT not null,
+    MESSAGE_ID BIGINT                 not null,
+    CHANNEL_ID CHARACTER VARYING(255) not null,
     primary key (MESSAGE_ID, CHANNEL_ID),
     constraint FK8NUBUIWJ3I21OHR8P7D31DG6A
         foreign key (CHANNEL_ID) references TB_CHANNEL,
@@ -69,8 +69,8 @@ create table RL_DELIVERY_CHANNEL
 
 create table RL_MESSAGE_GROUP
 (
-    MESSAGE_ID BIGINT not null,
-    GROUP_ID   BIGINT not null,
+    MESSAGE_ID BIGINT                 not null,
+    GROUP_ID   CHARACTER VARYING(255) not null,
     primary key (MESSAGE_ID, GROUP_ID),
     constraint FKKN41J2CP57J8DNVHXEH6ESKHE
         foreign key (GROUP_ID) references TB_GROUP,
@@ -82,11 +82,12 @@ create table TB_DELIVERY_MESSAGE
 (
     ID          BIGINT auto_increment
         primary key,
-    DT_DELIVERY TIMESTAMP               not null,
-    TX_ERROR    CHARACTER VARYING(5000) not null,
-    ST_SUCCESS  BOOLEAN                 not null,
+    DT_DELIVERY TIMESTAMP not null,
+    TX_ERROR    CHARACTER VARYING(5000),
+    ST_SUCCESS  BOOLEAN   not null,
     EMPLOYEE_ID BIGINT,
     MESSAGE_ID  BIGINT,
+    DT_CREATE   timestamp NOT NULL,
     constraint FKFMQC90RGOTYO3FRTY31FULWI0
         foreign key (MESSAGE_ID) references TB_MESSAGE,
     constraint FKHOOE54J1AC1MOMWYSMVGLT67X

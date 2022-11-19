@@ -1,5 +1,6 @@
 package com.aubay.touch.domain;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.persistence.*;
@@ -16,7 +17,8 @@ public class Employee {
 
     @Column(name = "TX_NAME", nullable = false)
     private String name;
-
+    @Column(name = "DT_CREATE", nullable = false)
+    private LocalDateTime dtCreate;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "RL_EMPLOYEE_GROUP",
@@ -25,7 +27,7 @@ public class Employee {
     )
     private Set<Group> groups = new HashSet<>();
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private Set<DeliveryMessage> messagesDelivered = new HashSet<>();
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
@@ -35,7 +37,13 @@ public class Employee {
         this.name = name;
         Arrays.stream(groups.split("/")).forEach(groupName -> this.groups.add(new Group(groupName)));
         this.employeeChannels = employeeChannels;
+        this.employeeChannels.forEach(e -> e.setEmployee(this));
 
+    }
+
+    @PrePersist
+    public void insertDate() {
+        this.dtCreate = LocalDateTime.now();
     }
 
     public Employee() {
@@ -90,21 +98,25 @@ public class Employee {
         return getGroups().stream().map(Group::getName).collect(Collectors.joining(","));
     }
 
+    public LocalDateTime getDtCreate() {
+        return dtCreate;
+    }
+
+    public void setDtCreate(LocalDateTime dtCreate) {
+        this.dtCreate = dtCreate;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return Objects.equals(id, employee.id);
+        return Objects.equals(id, employee.id) && Objects.equals(name, employee.name) && Objects.equals(employeeChannels, employee.employeeChannels);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, employeeChannels);
     }
 
     @Override
@@ -119,6 +131,7 @@ public class Employee {
     }
 
     public void addMessage(DeliveryMessage message) {
+        message.setEmployee(this);
         messagesDelivered.add(message);
     }
 }

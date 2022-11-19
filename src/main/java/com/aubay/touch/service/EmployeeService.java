@@ -20,17 +20,10 @@ import java.util.List;
 @Transactional
 public class EmployeeService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MessageService.class.getName());
-
     private final EmployeeRepository employeeRepository;
 
-    private final GroupRepository groupRepository;
-    private final ChannelRepository channelRepository;
-
-    public EmployeeService(EmployeeRepository employeeRepository, GroupRepository groupRepository, ChannelRepository channelRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-        this.groupRepository = groupRepository;
-        this.channelRepository = channelRepository;
     }
 
     public List<EmployeeResponse> getEmployees() {
@@ -46,21 +39,7 @@ public class EmployeeService {
 
     public int importEmployees(MultipartFile file) {
         try {
-
             List<Employee> employees = CSVHelper.csvToEmployees(file.getInputStream());
-            List<Channel> channels = channelRepository.findAll();
-            List<Group> groups = groupRepository.findAll();
-
-            employees.forEach(m -> {
-                m.getGroups().forEach(g -> groups.stream().filter(g2 -> g2.getName().equals(g.getName()))
-                        .findFirst()
-                        .ifPresentOrElse(group -> g.setId(group.getId()), () -> LOGGER.error("Not found group")));
-
-                m.getEmployeeChannels().forEach(c -> channels.stream().filter(c2 -> c2.getName().equals(c.getChannel().getName()))
-                        .findFirst()
-                        .ifPresentOrElse(group -> c.setId(group.getId()), () -> LOGGER.error("Not found channel")));
-            });
-
             employeeRepository.saveAll(employees);
             return employees.size();
         } catch (Exception e) {

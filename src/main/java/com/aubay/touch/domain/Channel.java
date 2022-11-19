@@ -13,9 +13,6 @@ import javax.persistence.Table;
 public class Channel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "TX_NAME", unique = true, nullable = false)
     private String name;
 
@@ -25,14 +22,6 @@ public class Channel {
 
     public Channel() {
         /*default*/
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -48,12 +37,12 @@ public class Channel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Channel channel = (Channel) o;
-        return Objects.equals(id, channel.id) && Objects.equals(name, channel.name);
+        return Objects.equals(name, channel.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(name);
     }
 
     @Override

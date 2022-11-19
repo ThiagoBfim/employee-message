@@ -76,12 +76,12 @@ public class EmployeeChannel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EmployeeChannel that = (EmployeeChannel) o;
-        return Objects.equals(id, that.id) && Objects.equals(identifier, that.identifier) && Objects.equals(channel, that.channel);
+        return Objects.equals(identifier, that.identifier) && Objects.equals(channel, that.channel);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, identifier, channel);
+        return Objects.hash(identifier, channel);
     }
 
     @Override

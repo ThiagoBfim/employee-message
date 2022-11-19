@@ -30,9 +30,9 @@ public class MessageController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> forceSendMessage() {
-        messageService.sendMessage();
-        return ResponseEntity.accepted().build();
+    public ResponseEntity<Integer> forceSendMessage() {
+        int qtd = messageService.sendMessage();
+        return ResponseEntity.accepted().body(qtd);
     }
 
     @RequestMapping(
