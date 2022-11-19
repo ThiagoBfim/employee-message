@@ -6,7 +6,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
-@Order(1)
+@Order(3)
 public class WhatsappDeliveryService implements IDeliveryService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WhatsappDeliveryService.class.getName());
