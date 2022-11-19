@@ -1,6 +1,3 @@
-FROM openjdk:17-jdk-slim-buster
-
-
-COPY /build/libs/touch-0.0.1-SNAPSHOT.jar app.jar
+FROM thiagobfim/employee-message:0.0.1
 
 ENTRYPOINT java -jar app.jar
