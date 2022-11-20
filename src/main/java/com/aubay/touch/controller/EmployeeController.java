@@ -29,6 +29,11 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployees());
     }
 
+    @GetMapping("/messages")
+    public ResponseEntity<List<DeliveryMessageResponse>> getDeliveryMessages() {
+        return ResponseEntity.ok(employeeService.getDeliveryMessage());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         employeeService.delete(id);

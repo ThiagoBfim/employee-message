@@ -83,10 +83,13 @@ create table TB_DELIVERY_MESSAGE
     ST_SUCCESS  BOOLEAN   not null,
     EMPLOYEE_ID BIGINT,
     MESSAGE_ID  BIGINT,
+    CHANNEL_ID  VARCHAR(255),
     DT_CREATE   timestamp NOT NULL,
     constraint FKFMQC90RGOTYO3FRTY31FULWI0
         foreign key (MESSAGE_ID) references TB_MESSAGE,
     constraint FKHOOE54J1AC1MOMWYSMVGLT67X
-        foreign key (EMPLOYEE_ID) references TB_EMPLOYEE
+        foreign key (EMPLOYEE_ID) references TB_EMPLOYEE,
+    constraint FK_CHANNEL_DELIVERY_MESSAGE
+        foreign key (CHANNEL_ID) references TB_CHANNEL
 );
 

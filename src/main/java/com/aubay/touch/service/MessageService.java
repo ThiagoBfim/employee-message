@@ -12,6 +12,7 @@ import com.aubay.touch.service.importer.CSVHelper;
 import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.aubay.touch.repository.EmployeeRepository;
@@ -69,7 +70,7 @@ public class MessageService {
         return messagesDelivered.get();
     }
 
-    private static void sendMessage(Message m, Employee employee, EmployeeChannel channel, IDeliveryService deliveryService, DeliveryMessage deliveryMessage) {
+    private static void sendMessage(Message m, Employee employee, EmployeeChannel channel, IDeliveryService deliveryService, @Nullable DeliveryMessage deliveryMessage) {
         var messageCtx = new MessageCtx(m.getTitle(), m.getMessage(), employee.getName(), channel.getIdentifier());
         var messageResult = deliveryService.sendMessage(messageCtx);
         var message = Optional.ofNullable(deliveryMessage).orElse(new DeliveryMessage(m));
@@ -79,6 +80,7 @@ public class MessageService {
             message.setSuccess(true);
             message.setDeliveryTime(LocalDateTime.now());
         }
+        message.setChannel(channel.getChannel());
         employee.addMessage(message);
     }
 

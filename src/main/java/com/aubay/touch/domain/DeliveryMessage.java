@@ -1,5 +1,7 @@
 package com.aubay.touch.domain;
 
+import com.aubay.touch.repository.ChannelRepository;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.*;
@@ -23,6 +25,10 @@ public class DeliveryMessage {
 
     @Column(name = "DT_CREATE", nullable = false)
     private LocalDateTime dtCreate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CHANNEL_ID")
+    private Channel channel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMPLOYEE_ID")
@@ -92,6 +98,22 @@ public class DeliveryMessage {
 
     public void setMessage(Message message) {
         this.message = message;
+    }
+
+    public LocalDateTime getDtCreate() {
+        return dtCreate;
+    }
+
+    public void setDtCreate(LocalDateTime dtCreate) {
+        this.dtCreate = dtCreate;
+    }
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 
     @Override

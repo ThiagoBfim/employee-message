@@ -15,6 +15,9 @@ spring:
   flyway:
     enabled: true
 
+  profiles:
+    default: prod
+
 springdoc:
   api-docs:
     path: "/documentation"
