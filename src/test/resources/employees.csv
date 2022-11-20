@@ -1,10 +1,9 @@
-﻿Name,UserGroup,Email, Whatsapp, Telegram
-Thiago,Java, thiago@mail.com, 999999999,
-Joseph,"Java,DevOps",joseph@gmail.com, 8888888, joseph
-Mark,DevOps,mark@gmail.com, 888888877,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
+﻿Name,UserGroup,Email, Whatsapp, Telegram,SMS
+Thiago,"Java,Admin", thiago@mail.com,+5561984948850,,+351914155734
+Joseph,"Java,DevOps",joseph@gmail.com,+234324234, joseph,
+Mark,DevOps,mark@gmail.com, 888888877,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,

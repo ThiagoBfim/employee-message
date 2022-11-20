@@ -17,10 +17,12 @@ import javax.persistence.*;
                        CAST(M.ST_STATUS AS VARCHAR) as status,
                        M.TX_MESSAGE as message,
                        M.DT_DELIVERY as deliveryDate,
+                       (SELECT string_agg(TG.TX_NAME, ',') FROM RL_MESSAGE_GROUP G INNER JOIN TB_GROUP TG on G.GROUP_ID = TG.TX_NAME WHERE G.MESSAGE_ID = M.ID) as groups,
+                       (SELECT string_agg(TC.TX_NAME, ',') FROM RL_DELIVERY_CHANNEL C INNER JOIN TB_CHANNEL TC on C.CHANNEL_ID = TC.TX_NAME WHERE C.MESSAGE_ID = M.ID) as channels,
                        (SELECT COUNT(TDM.ID) FROM TB_DELIVERY_MESSAGE TDM WHERE TDM.MESSAGE_ID = M.ID AND TDM.ST_SUCCESS = true) as deliverySuccess,
                        (SELECT COUNT(TDM.ID) FROM TB_DELIVERY_MESSAGE TDM WHERE TDM.MESSAGE_ID = M.ID AND TDM.ST_SUCCESS = false) as deliveryFailed
                 from TB_MESSAGE M
-                                """,
+                                                """,
         resultSetMapping = "MessageResponse"
 )
 @SqlResultSetMapping(
@@ -33,6 +35,8 @@ import javax.persistence.*;
                         @ColumnResult(name = "status"),
                         @ColumnResult(name = "message"),
                         @ColumnResult(name = "deliveryDate"),
+                        @ColumnResult(name = "groups"),
+                        @ColumnResult(name = "channels"),
                         @ColumnResult(name = "deliverySuccess"),
                         @ColumnResult(name = "deliveryFailed")
                 }

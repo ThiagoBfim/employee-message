@@ -14,7 +14,7 @@ public class DeliveryMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "DT_DELIVERY", nullable = false)
+    @Column(name = "DT_DELIVERY", nullable = true)
     private LocalDateTime deliveryTime;
 
     @Column(name = "ST_SUCCESS", nullable = false)

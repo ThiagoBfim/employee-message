@@ -3,6 +3,7 @@ package com.aubay.touch.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.aubay.touch.controller.response.MessageResponse;
@@ -44,33 +45,51 @@ public class MessageService {
         messagesToBeDelivered.forEach(message -> {
             //TODO improve to do it 100 per 100
             final List<Employee> employees = employeeRepository.findAllByGroupsIn(message.getGroups());
+            AtomicBoolean containsError = new AtomicBoolean(false);
             employees.forEach(employee -> employee.getEmployeeChannels()
                     .stream()
                     .filter(c -> message.getDeliveryChannel().contains(c.getChannel()))
-                    .forEach(channel -> deliveryService
-                            .forEach(deliveryService -> {
-                                if (deliveryService.getChannel().equalsIgnoreCase(channel.getChannelName())) {
+                    .forEach(channel -> {
+                        deliveryService
+                                .forEach(deliveryService -> {
+                                    if (deliveryService.getChannel().equalsIgnoreCase(channel.getChannelName())) {
 
-                                    Optional<DeliveryMessage> alreadySent = employee.getMessagesDelivered().stream().filter(deliveryMessage -> deliveryMessage.getMessage().equals(message)).findFirst();
-                                    if (alreadySent.isPresent()) {
-                                        if (BooleanUtils.isNotTrue(alreadySent.get().getSuccess())) {
-                                            sendMessage(message, employee, channel, deliveryService, alreadySent.get());
+                                        Optional<DeliveryMessage> alreadySent = employee.getMessagesDelivered().stream().filter(deliveryMessage -> deliveryMessage.getMessage().equals(message))
+                                                .filter(d -> d.getChannel().getName().equals(channel.getChannel().getName()))
+                                                .findFirst();
+                                        if (alreadySent.isPresent()) {
+                                            if (BooleanUtils.isNotTrue(alreadySent.get().getSuccess())) {
+                                                DeliveryMessage deliveryMessage = sendMessage(message, employee, channel, deliveryService, alreadySent.get());
+                                                employee.addMessage(deliveryMessage);
+                                                if (!deliveryMessage.getSuccess()) {
+                                                    containsError.set(true);
+                                                }
+                                                messagesDelivered.updateAndGet(v -> v + employees.size());
+                                            }
+                                        } else {
+                                            DeliveryMessage deliveryMessage = sendMessage(message, employee, channel, deliveryService, null);
+                                            employee.addMessage(deliveryMessage);
+                                            if (!deliveryMessage.getSuccess()) {
+                                                containsError.set(true);
+                                            }
+                                            messagesDelivered.updateAndGet(v -> v + employees.size());
                                         }
-                                    } else {
-                                        sendMessage(message, employee, channel, deliveryService, null);
                                     }
-                                }
-                            })));
-            messagesDelivered.updateAndGet(v -> v + employees.size());
+                                });
+                    }));
             employeeRepository.saveAll(employees);
 
-            message.setStatus(MessageStatus.SENT);
+            if (containsError.get()) {
+                message.setStatus(MessageStatus.PENDING);
+            } else {
+                message.setStatus(MessageStatus.SENT);
+            }
             messageRepository.save(message);
         });
         return messagesDelivered.get();
     }
 
-    private static void sendMessage(Message m, Employee employee, EmployeeChannel channel, IDeliveryService deliveryService, @Nullable DeliveryMessage deliveryMessage) {
+    private static DeliveryMessage sendMessage(Message m, Employee employee, EmployeeChannel channel, IDeliveryService deliveryService, @Nullable DeliveryMessage deliveryMessage) {
         var messageCtx = new MessageCtx(m.getTitle(), m.getMessage(), employee.getName(), channel.getIdentifier());
         var messageResult = deliveryService.sendMessage(messageCtx);
         var message = Optional.ofNullable(deliveryMessage).orElse(new DeliveryMessage(m));
@@ -81,7 +100,7 @@ public class MessageService {
             message.setDeliveryTime(LocalDateTime.now());
         }
         message.setChannel(channel.getChannel());
-        employee.addMessage(message);
+        return message;
     }
 
     @Transactional(readOnly = true)
@@ -100,4 +119,5 @@ public class MessageService {
             throw new RuntimeException("Error importing messages", e);
         }
     }
+
 }

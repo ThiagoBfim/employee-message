@@ -15,8 +15,6 @@ spring:
   flyway:
     enabled: true
 
-  profiles:
-    default: prod
 
 springdoc:
   api-docs:
@@ -33,3 +31,8 @@ management:
   endpoint:
     health:
       show-details: always
+
+
+twillio:
+  account-sid: "A"
+  auth-token: "3a"
