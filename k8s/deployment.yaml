@@ -35,7 +35,7 @@ spec:
       containers:
         - name: employee-message
         #  image: thiagobfim/employee-message:0.0.1
-          image: image-registry.openshift-image-registry.svc:5000/thiagobfim-dev/employee-message:0.0.8
+          image: image-registry.openshift-image-registry.svc:5000/thiagobfim-dev/employee-message:0.1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

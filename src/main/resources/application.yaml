@@ -14,6 +14,7 @@ spring:
       path: /h2-console
   flyway:
     enabled: true
+
   profiles:
     default: secprod
 
@@ -38,3 +39,8 @@ management:
 twillio:
   account-sid: "A"
   auth-token: "3a"
+
+
+xrapid:
+  key: "1"
+  host: "simple-mail-sending.p.rapidapi.com"
