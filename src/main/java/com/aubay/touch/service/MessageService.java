@@ -109,6 +109,11 @@ public class MessageService {
     }
 
     @Transactional
+    public void cleanDatabase() {
+        messageRepository.cleanDatabase();
+    }
+
+    @Transactional
     public int importMessages(MultipartFile file) {
         try {
             List<Message> messages = CSVHelper.csvToMessages(file.getInputStream());

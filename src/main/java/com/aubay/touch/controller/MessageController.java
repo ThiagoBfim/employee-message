@@ -29,6 +29,12 @@ public class MessageController {
         return ResponseEntity.ok(messageService.findAll());
     }
 
+    @PostMapping("/cleanall")
+    public ResponseEntity<?> cleanDatabase() {
+        messageService.cleanDatabase();
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping
     public ResponseEntity<Integer> forceSendMessage() {
         int qtd = messageService.sendMessage();

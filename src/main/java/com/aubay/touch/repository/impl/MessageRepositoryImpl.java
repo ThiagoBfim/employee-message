@@ -16,4 +16,17 @@ public class MessageRepositoryImpl implements CustomMessageRepository {
         return (List<MessageResponse>) entityManager.createNamedQuery("MessageResponse")
                 .getResultList();
     }
+
+    @Override
+
+    public void cleanDatabase() {
+        entityManager.createNativeQuery("DELETE FROM rl_employee_group WHERE 1=1;\n" +
+                        "DELETE FROM rl_message_group WHERE 1=1;\n" +
+                        "DELETE FROM TB_DELIVERY_MESSAGE WHERE 1=1;\n" +
+                        "DELETE FROM RL_DELIVERY_CHANNEL WHERE 1=1;\n" +
+                        "DELETE FROM TB_EMPLOYEE_CHANNEL WHERE 1=1;\n" +
+                        "DELETE FROM tb_employee WHERE 1=1;\n" +
+                        "DELETE FROM tb_message WHERE 1=1;")
+                .executeUpdate();
+    }
 }

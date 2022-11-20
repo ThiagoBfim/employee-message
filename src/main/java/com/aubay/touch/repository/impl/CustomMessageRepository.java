@@ -7,4 +7,6 @@ import java.util.List;
 public interface CustomMessageRepository {
 
     List<MessageResponse> findAllMessages();
+
+    void cleanDatabase();
 }
