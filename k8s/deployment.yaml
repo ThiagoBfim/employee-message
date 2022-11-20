@@ -1,40 +1,44 @@
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: employee-message-service
+  name: employee-message
   labels:
-    app: employee-aubay
+    app: employee-message
 spec:
   type: ClusterIP
   ports:
-    - name: employee-aubay
+    - name: employee-message
       protocol: TCP
       port: 8080
       targetPort: 8080
   selector:
-    app: employee-aubay
+    app: employee-message
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: employee-message-aubay
+  name: employee-message
   labels:
-    app: employee-aubay
+    app: employee-message
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: employee-aubay
+      app: employee-message
   template:
     metadata:
       labels:
-        app: employee-aubay
+        app: employee-message
     spec:
       containers:
         - name: employee-message
         #  image: thiagobfim/employee-message:0.0.1
-          image: default-route-openshift-image-registry.apps.sandbox.x8i5.p1.openshiftapps.com/thiagobfim-dev/employee-message:0.0.4
+          image: image-registry.openshift-image-registry.svc:5000/thiagobfim-dev/employee-message:0.0.8
           imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
           livenessProbe:
             failureThreshold: 3
             httpGet:
